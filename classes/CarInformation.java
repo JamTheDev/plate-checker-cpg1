@@ -1,5 +1,9 @@
+package classes;
+
 import enums.Days;
 import enums.Errors;
+import enums.Places;
+import util.Utilities;
 
 public class CarInformation {
 
@@ -20,14 +24,13 @@ public class CarInformation {
 
     public boolean getCodingStatus() {
 
-        char lastPlateNumber = getPlateNumber()[1].charAt(2);
+        Integer lastPlateNumber;
 
-        // it will try to first parse the number part of the plate.
-        // if it cannot parse it, it means that the submitted
+        // if the program cannot parse it, it means that the submitted
         // plate number is invalid, hence throwing an error and will
         // result in the method returning a false.
         try {
-            Integer.parseInt(String.valueOf(lastPlateNumber));
+            lastPlateNumber = Integer.parseInt(String.valueOf(getPlateNumber()[1].charAt(2)));
             Integer.parseInt(String.valueOf(getPlateNumber()[1]));
         } catch (Exception e) {
             System.out.println("Invalid plate number!");
@@ -41,20 +44,18 @@ public class CarInformation {
         //
         // index 0 = day
         // index 1 & 2 = plates available for the day
-        for (String[] day : Days.days) {
+        for (Coding day : Days.days) {
             // conditions can be stored in a boolean variable
             // so we are going to store this to clean up our code.
             // but the summary of this code is that, it just checks if the last number
             // of our plate given matches the 2 given values in index.
-            boolean validPlateNumber = day[1].equals(String.valueOf(lastPlateNumber))
-                    || day[2].equals(String.valueOf(lastPlateNumber));
 
             // should be self-explanatory
-            if (day[0].equals(this.day) && validPlateNumber) {
+            if (day.isCoding(this.day, lastPlateNumber) && Utilities.contains(Places.places, this.place)) {
 
                 // if the coding is in makati or pasay...
                 // siguro naman self-explanatory na 'to
-                if (this.place.toLowerCase().equalsIgnoreCase("makati") || this.place.equalsIgnoreCase("pasay")) {
+                if (this.place.equalsIgnoreCase("makati") || this.place.equalsIgnoreCase("pasay")) {
                     return time >= 700 && time <= 2059;
                 }
                 

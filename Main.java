@@ -1,19 +1,16 @@
 //Program Name and Description
 
 import java.util.Scanner;
+import classes.*;
 
 public class Main {
-
-	static boolean test;
-	
-	
 	public static void main(String[] args) {
 
 		Scanner sc = new Scanner(System.in);
 		char confirmation = 'n';
 
 		do {
-			
+
 			System.out.print("Plate No: ");
 			String plateNo = sc.nextLine();
 
@@ -25,9 +22,8 @@ public class Main {
 
 			System.out.print("Time: ");
 			int time = sc.nextInt();
-			
-			CarInformation carInformation = new CarInformation(plateNo, day, place, time);
 
+			CarInformation carInformation = new CarInformation(plateNo, day, place, time);
 			carInformation.printCarInformation();
 
 			System.out.println("=========================");
