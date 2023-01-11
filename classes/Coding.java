@@ -12,6 +12,10 @@ public class Coding {
     }
 
     public boolean isCoding(String day, Integer plateNumberEnd) {
-        return this.day == day && Utilities.contains(platesEndingIn, plateNumberEnd);
+        return this.day.toLowerCase().equalsIgnoreCase(day) && Utilities.contains(platesEndingIn, plateNumberEnd);
     } 
+
+    public String getDay() {
+        return this.day;
+    }
 }

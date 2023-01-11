@@ -8,7 +8,7 @@ import util.Utilities;
 public class CarInformation {
 
     private String plateNumber, day, place;
-    private Errors error = Errors.NONE;
+    private Errors error;
     private int time;
 
     public CarInformation(String plateNumber, String day, String place, int time) {
@@ -16,6 +16,8 @@ public class CarInformation {
         this.day = day;
         this.place = place;
         this.time = time;
+
+        this.error = Errors.NONE;
     }
 
     public String[] getPlateNumber() {
@@ -38,6 +40,17 @@ public class CarInformation {
             return false;
         }
 
+        // error catching here
+        if (this.time > 2459) {
+            this.error = Errors.INVALID_TIME;
+        }
+
+        if (!Utilities.contains(Places.places, this.place.toLowerCase())) {
+            this.error = Errors.INVALID_CITY;
+        }
+
+        if (error != Errors.NONE)
+            return false;
 
         // in this portion of the program, it will iterate through the Days enum
         // remember that each value in this enum has a size of 3 where:
@@ -51,14 +64,13 @@ public class CarInformation {
             // of our plate given matches the 2 given values in index.
 
             // should be self-explanatory
-            if (day.isCoding(this.day, lastPlateNumber) && Utilities.contains(Places.places, this.place)) {
-
+            if (day.isCoding(this.day, lastPlateNumber)) {
                 // if the coding is in makati or pasay...
                 // siguro naman self-explanatory na 'to
                 if (this.place.equalsIgnoreCase("makati") || this.place.equalsIgnoreCase("pasay")) {
                     return time >= 700 && time <= 2059;
                 }
-                
+
                 // this too... HAHAHAAHHA
                 return time >= 1501 && time <= 2059;
             }
@@ -68,11 +80,30 @@ public class CarInformation {
     }
 
     public void printCarInformation() {
-        System.out.println(
-                "Plate Number: " + plateNumber + "\n" +
+        String toPrint = "";
+        boolean codingStatus = getCodingStatus();
+        switch (this.error) {
+            case INVALID_PLATE_NO:
+                toPrint = "Plate number is invalid. Please try again!";
+                break;
+            case INVALID_CITY:
+                toPrint = "City is Invalid! Please try again.";
+                break;
+            case INVALID_TIME:
+                toPrint = "Time is invalid! Please try again.";
+                break;
+            case INVALID_WEEKDAY:
+                toPrint = "Weekday is invalid. Please try again!";
+                break;
+            case NONE:
+                toPrint = "Plate Number: " + plateNumber + "\n" +
                         "Day: " + day + "\n" +
                         "Place: " + place + "\n" +
                         "Time: " + time + "\n" +
-                        "Status: " + (getCodingStatus() ? "CODING" : "NOT CODING") + "\n");
+                        "Status: " + (codingStatus ? "CODING" : "NOT CODING");
+                break;
+        }
+
+        System.out.println(toPrint);
     }
 }
